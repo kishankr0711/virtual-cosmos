@@ -2,20 +2,12 @@ import { Room, User } from '../types/index.js';
 import { CONSTANTS } from '../config/constants.js';
 import { v4 as uuidv4 } from 'uuid';
 
-/**
- * Dynamic Room Management System
- *
- * Rooms are created dynamically when users come into proximity.
- * When 2+ users are nearby, they form a room (max 4 users).
- * Rooms split/merge as users move.
- */
+// dynamic room management
 export class RoomService {
   private rooms: Map<string, Room> = new Map();
   private userRoomMap: Map<string, string> = new Map(); // userId -> roomId
 
-  /**
-   * Assign rooms based on proximity connections
-   */
+  // assign room connection
   assignRooms(users: Map<string, User>): Map<string, string> {
     const assignments = new Map<string, string>();
     const processed = new Set<string>();
@@ -49,12 +41,10 @@ export class RoomService {
       }
     }
 
-    // Reset room memberships for recalculation.
     for (const room of this.rooms.values()) {
       room.userIds.clear();
     }
 
-    // Split each cluster into room-sized chunks.
     for (const cluster of clusters) {
       const sorted = this.stableSortByPreviousRoom(cluster);
 
@@ -70,7 +60,6 @@ export class RoomService {
       }
     }
 
-    // Apply assignments to users and user-room map.
     for (const [userId, user] of users) {
       const roomId = assignments.get(userId) ?? null;
       user.roomId = roomId;
@@ -82,7 +71,6 @@ export class RoomService {
       }
     }
 
-    // Cleanup empty rooms.
     for (const [roomId, room] of this.rooms) {
       if (room.userIds.size === 0) {
         this.rooms.delete(roomId);
@@ -119,7 +107,6 @@ export class RoomService {
   }
 
   private pickRoomForChunk(chunk: string[]): string {
-    // Reuse a previous room only when all chunk users previously shared it.
     const previousRoomIds = new Set(
       chunk
         .map((id) => this.userRoomMap.get(id))

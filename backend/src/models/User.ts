@@ -15,7 +15,6 @@ export interface IUser extends Document {
     messagesSent: number;
   };
 }
-
 const UserSchema = new Schema<IUser>({
   profileId: { type: String, required: true, index: true },
   userId: { type: String, required: true, unique: true, index: true },

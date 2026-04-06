@@ -2,26 +2,26 @@ import { create } from 'zustand';
 import type { User, ChatMessage, WorldBounds } from '../types/index';
 
 interface GameStore {
-  // Users
+  //users
   users: Map<string, User>;
   currentUserId: string | null;
   currentUser: User | null;
 
-  // Room state
+  //room state
   roomId: string | null;
   roomMembers: string[];
 
-  // Proximity
+  //proximity
   connectedUsers: Set<string>;
 
-  // Chat
+  //chat
   messages: ChatMessage[];
   isChatOpen: boolean;
 
-  // World
+  //world
   worldBounds: WorldBounds;
 
-  // Actions
+  //actions
   setCurrentUser: (userId: string, users: User[]) => void;
   updateUser: (user: User) => void;
   removeUser: (userId: string) => void;

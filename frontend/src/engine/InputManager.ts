@@ -3,7 +3,7 @@ export class InputManager {
   private onMove: (dx: number, dy: number) => void;
   private animationFrame: number | null = null;
   private isActive: boolean = true;
-  private speed: number = 300; // pixels per second
+  private speed: number = 300; //ppsec
 
   constructor(onMove: (dx: number, dy: number) => void) {
     this.onMove = onMove;
@@ -13,7 +13,6 @@ export class InputManager {
   }
   
   private setupListeners(): void {
-    // Capture on window to ensure we get keys even if canvas isn't focused
     window.addEventListener('keydown', this.handleKeyDown, { passive: false });
     window.addEventListener('keyup', this.handleKeyUp, { passive: false });
     
@@ -21,15 +20,12 @@ export class InputManager {
   }
   
   private handleKeyDown = (e: KeyboardEvent) => {
-    // Prevent default for game keys to stop page scrolling
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
       e.preventDefault();
     }
     
     this.keys.add(e.code);
     this.keys.add(e.key.toLowerCase());
-    
-    // Also add common variants
     if (e.key === 'ArrowUp') this.keys.add('up');
     if (e.key === 'ArrowDown') this.keys.add('down');
     if (e.key === 'ArrowLeft') this.keys.add('left');
@@ -52,7 +48,7 @@ export class InputManager {
     const loop = (currentTime: number) => {
       if (!this.isActive) return;
       
-      const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+      const deltaTime = (currentTime - lastTime) / 1000;
       lastTime = currentTime;
       
       this.update(deltaTime);
@@ -67,7 +63,7 @@ export class InputManager {
     let dx = 0;
     let dy = 0;
     
-    // Check all possible key variants
+    //check all possible key variants
     const up = this.keys.has('KeyW') || this.keys.has('ArrowUp') || this.keys.has('up') || this.keys.has('w');
     const down = this.keys.has('KeyS') || this.keys.has('ArrowDown') || this.keys.has('down') || this.keys.has('s');
     const left = this.keys.has('KeyA') || this.keys.has('ArrowLeft') || this.keys.has('left') || this.keys.has('a');
@@ -78,20 +74,16 @@ export class InputManager {
     if (left) dx -= 1;
     if (right) dx += 1;
     
-    // Only move if there's input
     if (dx !== 0 || dy !== 0) {
-      // Normalize diagonal movement
       if (dx !== 0 && dy !== 0) {
         const length = Math.sqrt(dx * dx + dy * dy);
         dx /= length;
         dy /= length;
       }
       
-      // Calculate movement
       const moveX = dx * this.speed * deltaTime;
       const moveY = dy * this.speed * deltaTime;
       
-      // Only call if movement is significant
       if (Math.abs(moveX) > 0.1 || Math.abs(moveY) > 0.1) {
         this.onMove(moveX, moveY);
       }

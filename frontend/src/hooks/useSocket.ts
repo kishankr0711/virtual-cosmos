@@ -53,7 +53,7 @@ const playSound = (type: 'connect' | 'disconnect') => {
       oscillator.stop(ctx.currentTime + 0.2);
     }
   } catch {
-    // noop
+    
   }
 };
 

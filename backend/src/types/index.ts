@@ -1,4 +1,4 @@
-// Core user representation in the system
+//user representation in the system
 export interface User {
   id: string;
   profileId: string;
@@ -7,7 +7,7 @@ export interface User {
   y: number;
   color: string;
   lobbyRoomId: string;
-  roomId: string | null; // Proximity chat room
+  roomId: string | null;
   connections: Set<string>;
   lastActive: number;
   velocity: { x: number; y: number };

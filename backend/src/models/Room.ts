@@ -7,7 +7,6 @@ export interface IRoom extends Document {
   occupancy: number;
   isActive: boolean;
 }
-
 const RoomSchema = new Schema<IRoom>({
   roomId: { type: String, required: true, unique: true, index: true },
   name: { type: String, required: true },

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-// MongoDB connection with retry logic
+//mongo connection
 export const connectDatabase = async (): Promise<void> => {
   const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/virtual-cosmos';
   
@@ -8,7 +8,7 @@ export const connectDatabase = async (): Promise<void> => {
     await mongoose.connect(uri);
     console.log('✅ MongoDB connected successfully');
     
-    // Handle connection events
+    //handle connection
     mongoose.connection.on('error', (err) => {
       console.error('MongoDB connection error:', err);
     });
@@ -19,7 +19,7 @@ export const connectDatabase = async (): Promise<void> => {
     
   } catch (error) {
     console.error('Failed to connect to MongoDB:', error);
-    // Retry connection after 5 seconds
+    //retry for more than 5 sec
     setTimeout(connectDatabase, 5000);
   }
 };
